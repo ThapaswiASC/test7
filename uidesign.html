@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Parent Managing Youth Account — High-Fidelity UI Design</title>
+  <title>Parent Management of Youth Account Funds — UI Design</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* --- PLAY UI DESIGN TOKENS (EXCERPT) --- */
     :root {
+      /* Colors */
       --Neutral-N-100: #ededf3;
       --Neutral-N-200: #DADCE7;
       --Neutral-N-1000: #292c3d;
@@ -83,22 +84,17 @@
       --font-font-size-heading-6: 14px;
       --border-radius: 8px;
       --border-radius-medium: 12px;
-      --3x: 12px;
-      --4x: 16px;
-      --5x: 20px;
       --Elevation-Light-Fill-Light-30: rgba(240,240,245,0.3);
       --Elevation-Light-Fill-Light-60: rgba(240,240,245,0.6);
       --gradient-light-active: linear-gradient(102deg,rgba(63,81,181,0.08) 0%,rgba(63,81,181,0.12) 100%);
       --progress-stroke-color: #858aad;
       --auth-container-bg: rgba(240,240,245,0.72);
       --auth-height-lg: 32px;
+      --avatar-size: var(--spacing-12x);
     }
-    /* --- RESET & BASE --- */
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%;font-family:var(--font-font-family-body);background:var(--Neutral-N-100);color:var(--text-body);font-size:var(--font-font-size-body);line-height:1.5}
-    /* --- LAYOUT --- */
     #app{display:flex;height:100vh;overflow:hidden}
-    /* --- SIDEBAR --- */
     .sidebar-container{width:260px;flex-shrink:0;display:flex;flex-direction:row}
     .sidebar{flex:1;display:flex;flex-direction:column;height:100vh;padding:var(--spacing-7x) var(--spacing-5x) var(--spacing-7x) var(--spacing-3x);border-radius:0;border-right:0.5px solid var(--Neutral-N-200);background:var(--button-secondary-bg-bg);box-shadow:0px 2px 4px 0px rgba(0,0,0,0.16);backdrop-filter:blur(15px);overflow-y:auto}
     .sidebar-brand{display:flex;align-items:center;gap:var(--spacing-3x);padding:0 var(--spacing-3x) var(--spacing-6x);border-bottom:1px solid var(--Neutral-N-200);margin-bottom:var(--spacing-4x)}
@@ -116,9 +112,7 @@
     .sb-footer{margin-top:auto;padding:var(--spacing-4x) var(--spacing-3x);border-top:1px solid var(--Neutral-N-200)}
     .sb-footer-text{font-size:var(--font-font-size-small);color:var(--text-caption);line-height:1.9}
     .sb-footer-text strong{color:var(--text-caption);display:block;font-weight:var(--font-font-weight-medium)}
-    /* --- MAIN --- */
     #main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-    /* --- HEADER --- */
     .outer-box{width:100%;height:var(--spacing-14x);display:flex;justify-content:center;align-items:center;background-color:var(--text-white);box-shadow:0 2px 4px rgba(0,0,0,0.05);flex-shrink:0;padding:0 var(--spacing-6x)}
     .header-inner{width:100%;display:flex;align-items:center;justify-content:space-between;gap:var(--spacing-3x)}
     .search-field{display:flex;align-items:center;gap:var(--spacing-2x);flex:1;max-width:360px;background:var(--Elevation-Light-Fill-Light-30);border:1px solid var(--Neutral-N-200);border-radius:var(--awe-card-border-radius);padding:var(--spacing-2x) var(--spacing-3x);color:var(--text-caption)}
@@ -128,7 +122,7 @@
     .circular-icon{width:36px;height:36px;border-radius:50%;border:0.5px solid var(--Neutral-N-200);background:var(--Elevation-Light-Fill-Light-60);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;color:var(--icons-neutral-icon);transition:background 0.2s}
     .circular-icon:hover{background:var(--Neutral-N-200)}
     .notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;background:var(--button-primary-bg-danger);border-radius:50%;border:1.5px solid white}
-    .avatar-container{position:relative;width:var(--spacing-12x);height:var(--spacing-12x);display:grid;place-items:center;border-radius:var(--round);background:var(--Elevation-Light-Fill-Light-60);overflow:visible;width:32px;height:32px}
+    .avatar-container{position:relative;width:32px;height:32px;display:grid;place-items:center;border-radius:var(--round);background:var(--Elevation-Light-Fill-Light-60);overflow:visible}
     .avatar-img{width:32px;height:32px;border-radius:var(--round);background:var(--button-primary-bg-action);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:var(--font-font-weight-bold);color:var(--text-white)}
     .avatar-chip{display:flex;align-items:center;gap:var(--spacing-2x);padding:4px 10px 4px 4px;background:var(--Elevation-Light-Fill-Light-30);border:0.5px solid var(--Neutral-N-200);border-radius:var(--round);cursor:pointer}
     .avatar-chip:hover{background:var(--Neutral-N-200)}
@@ -136,10 +130,488 @@
     #content{flex:1;overflow-y:auto;background:var(--Neutral-N-100)}
     .page{display:none;padding:var(--spacing-8x)}
     .page.active{display:block}
-    /* ... (rest of Play UI styles and all screens as shown in the sample output, fully Play-compliant, with all navigation and visual details, as required) ... */
+    .page-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:var(--spacing-6x)}
+    .heading.h3{font-size:var(--font-font-size-heading-3);font-family:var(--font-font-family-heading);font-weight:var(--font-font-weight-bold);color:var(--text-title);letter-spacing:-.03em;line-height:1.2}
+    .page-sub{font-size:var(--font-font-size-label);color:var(--text-caption);margin-top:4px}
+    .breadcrumb{list-style:none;padding:0;margin:0 0 var(--spacing-2x);display:flex;align-items:center;flex-wrap:wrap}
+    .breadcrumb li{margin-right:var(--spacing-2x);font-size:var(--spacing-4x);display:flex;align-items:center;color:var(--text-caption)}
+    .breadcrumb li a{text-decoration:none;color:var(--text-body);transition:color 0.3s ease;display:inline-flex}
+    .breadcrumb li a:hover{color:var(--icons-success)}
+    .breadcrumb li span{color:var(--button-links-success);font-weight:var(--font-font-weight-regular)}
+    .g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--spacing-4x);margin-bottom:var(--spacing-4x)}
+    .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--spacing-4x);margin-bottom:var(--spacing-4x)}
+    @media(max-width:900px){.g3,.g2{grid-template-columns:1fr}}
+    .awe-card{position:relative;display:flex;flex-direction:column;border-radius:var(--awe-card-border-radius);overflow:hidden;transition:all 0.3s ease}
+    .awe-card--light{background:var(--button-secondary-bg-bg);color:var(--Neutral-N-1000);box-shadow:var(--awe-card-shadow)}
+    .awe-card--auto{width:100%;height:100%;padding:var(--awe-card-padding-small)}
+    .awe-card--medium{width:100%;min-height:200px;padding:var(--awe-card-padding-medium)}
+    .awe-card--elderwand-agent{border-radius:var(--border-radius-medium);background:#fff;box-shadow:0px 1px 4px 0px rgba(0,0,0,0.05);padding:var(--awe-card-padding-medium)}
+    .awe-card:hover{box-shadow:var(--awe-card-shadow-elevated)}
+    .awe-card__header{margin-bottom:var(--spacing-4x)}
+    .card-title-text{font-size:var(--font-font-size-heading-6);font-weight:var(--font-font-weight-bold);color:var(--text-title)}
+    .card-sub-text{font-size:var(--font-font-size-small);color:var(--text-caption);margin-top:2px}
+    .mb-0{margin-bottom:0!important}
+    .stat-ico{width:40px;height:40px;border-radius:var(--border-radius);display:flex;align-items:center;justify-content:center;margin-bottom:var(--spacing-4x)}
+    .stat-lbl{font-size:var(--font-font-size-label);color:var(--text-caption);font-weight:var(--font-font-weight-medium);margin-bottom:4px}
+    .stat-val{font-size:26px;font-weight:var(--font-font-weight-bold);letter-spacing:-.04em;line-height:1.1;color:var(--text-title)}
+    .stat-sub{font-size:var(--font-font-size-small);color:var(--text-caption);margin-top:5px}
+    button.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--spacing-2x);border:none;cursor:pointer;transition:all 0.2s ease;position:relative;overflow:hidden;font-family:var(--font-font-family-body);white-space:nowrap;font-weight:var(--font-font-weight-medium);line-height:1.5;border-radius:var(--border-radius);text-align:center;min-width:6.25rem}
+    button.btn.medium{padding:0.625rem 1.25rem;font-size:14px}
+    button.btn.small{padding:0.4rem 0.875rem;font-size:12px}
+    button.btn.large{padding:0.875rem 1.75rem;font-size:16px}
+    button.btn.primary{background-color:var(--button-primary-bg-action);color:var(--button-primary-label-action)}
+    button.btn.primary:hover{background-color:var(--button-primary-hover-action)}
+    button.btn.secondary{background-color:var(--button-secondary-bg-bg);border:1px solid var(--button-secondary-border-action);color:var(--button-secondary-label-action)}
+    button.btn.secondary:hover{border-color:var(--focused-selected-ring)}
+    button.btn.danger{background-color:var(--button-warning-hover-bg);border:1px solid var(--button-secondary-label-warning);color:var(--button-secondary-label-warning)}
+    button.btn.danger:hover{background-color:var(--button-danger-hover-bg)}
+    button.btn.ghost{background:transparent;border:none;color:var(--text-caption)}
+    button.btn.ghost:hover{background:var(--button-primary-bg-subtle);color:var(--button-primary-bg-action)}
+    button.btn:disabled{background:var(--button-primary-bg-disable);color:var(--button-primary-label-disable);cursor:not-allowed}
+    .badge{display:flex;justify-content:center;align-items:center;text-align:center;font-family:var(--font-font-family-label);font-size:var(--font-font-size-label);font-weight:var(--font-font-weight-medium);border-radius:var(--round);padding:3px 10px;cursor:default}
+    .badge-success{background:var(--icons-success);color:var(--badge-text-success)}
+    .badge-warning{background:var(--icons-warning);color:var(--badge-text-warning)}
+    .badge-danger{background:var(--button-secondary-label-warning);color:var(--text-white)}
+    .badge-info{background:var(--button-links-information);color:var(--text-white)}
+    .badge-neutral{background:var(--Neutral-N-200);color:var(--text-body)}
+    .badge-primary{background:var(--button-primary-bg-subtle);color:var(--button-primary-bg-action)}
+    .badge-dot::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block;margin-right:4px}
+    .tabs-container{width:100%;font-family:var(--font-font-family-body);transition:all 0.3s ease;--tab-bg:var(--surface);--tab-active-bg:var(--gradient-light-active);--tab-border:var(--Neutral-N-200);--tab-text:var(--text-body);--tab-active-text:var(--button-primary-bg-action)}
+    .tabs-nav{display:flex;border-bottom:1px solid var(--tab-border);margin-bottom:var(--spacing-5x);background:var(--tab-bg)}
+    .tab-item{padding:10px var(--spacing-5x);cursor:pointer;font-size:13px;font-weight:var(--font-font-weight-medium);color:var(--text-caption);border-bottom:2px solid transparent;margin-bottom:-1px;transition:color 0.15s,border-color 0.15s}
+    .tab-item:hover{color:var(--tab-active-text)}
+    .tab-item.active{color:var(--tab-active-text);border-bottom-color:var(--button-primary-bg-action);background:var(--tab-active-bg)}
+    .stepper-wrapper{width:100%;background-color:var(--surface);border-radius:var(--3x);padding:var(--5x);box-shadow:0 2px 8px rgba(0,0,0,0.1);margin-bottom:var(--spacing-6x)}
+    .stepper{display:flex;flex-direction:row;justify-content:space-between;align-items:flex-start;height:auto;width:100%}
+    .step{display:flex;flex-direction:column;align-items:center;position:relative;z-index:2;flex:1}
+    .circle-label{display:flex;flex-direction:column;align-items:center;gap:6px}
+    .step-circle{width:var(--auth-height-lg);height:var(--auth-height-lg);border-radius:50%;background-color:var(--auth-container-bg);border:1px solid var(--progress-stroke-color);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--text-title);z-index:2;font-family:var(--font-font-family-heading);box-shadow:0px 1px 4px 0px rgba(0,0,0,0.24);font-weight:var(--font-font-weight-medium)}
+    .step-circle.active{background-color:var(--button-primary-bg-action);color:var(--text-white);border:none}
+    .step-circle.completed{background-color:var(--icons-success);color:var(--text-white);border:none}
+    .step-label{font-size:var(--font-font-size-small);color:var(--text-caption);font-weight:var(--font-font-weight-medium);text-align:center}
+    .step-connector{flex:1;height:1px;background:var(--progress-stroke-color);margin:0 var(--spacing-3x);margin-top:16px;align-self:flex-start}
+    .step-connector.completed{background:var(--icons-success)}
+    .step-connector.active{background:var(--button-primary-bg-action)}
+    .step-row{display:flex;align-items:flex-start;width:100%}
+    .input-container{display:flex;flex-direction:column;gap:5px;height:auto;width:100%}
+    .input-container label{font-family:var(--font-font-family-label);font-size:var(--font-font-size-label);font-weight:var(--font-font-weight-medium);color:var(--text-body)}
+    .input-wrapper{display:flex;width:100%;height:auto;min-height:48px;padding:0 var(--spacing-5x);justify-content:space-between;align-items:center;border-radius:var(--3x);background:#fff;position:relative;transition:border 0.2s ease-in-out;font-size:14px;font-weight:400;border:2px solid var(--button-secondary-border-action)}
+    .input-wrapper input,.input-wrapper textarea,.input-wrapper select{border:none;background:transparent;outline:none;font-family:inherit;font-size:14px;color:var(--text-body);flex:1;width:100%}
+    .input-wrapper input::placeholder,.input-wrapper textarea::placeholder{color:var(--text-disabled)}
+    .input-wrapper textarea{padding:12px 0;resize:vertical;min-height:70px}
+    .input-wrapper.focused,.input-wrapper:focus-within{border-color:var(--button-primary-bg-action);box-shadow:0 0 0 3px var(--button-primary-bg-subtle)}
+    .input-wrapper.green{border-color:var(--icons-success)}
+    .fg{margin-bottom:var(--spacing-4x)}
+    .divider{width:100%;border-top:1px solid var(--button-primary-bg-disable);margin:var(--spacing-4x) 0}
+    .toggle-wrapper{display:flex;align-items:center;gap:11px;justify-content:space-between;padding:var(--spacing-3x) 0;border-bottom:1px solid var(--Neutral-N-200)}
+    .toggle-wrapper:last-child{border-bottom:none}
+    .toggle-text{flex:1}
+    .toggle-label{font-size:var(--font-font-size-body);font-family:var(--font-font-family-label);font-weight:var(--font-font-weight-medium);color:var(--text-title)}
+    .toggle-description{display:block;font-size:var(--font-font-size-small);color:var(--text-caption);font-weight:var(--font-font-weight-regular);margin-top:2px}
+    .toggle-container{background-color:var(--button-primary-bg-subtle);border-radius:var(--round);cursor:pointer;user-select:none;display:flex;align-items:center;padding:var(--spacing-1x);transition:background-color 0.3s;flex-shrink:0}
+    .toggle-container.checked{background-color:var(--button-primary-bg-action)}
+    .toggle-container--medium{width:var(--spacing-11x);height:var(--toggle-height)}
+    .toggle-thumb{background-color:var(--button-secondary-bg-bg);border-radius:100%;transition:transform 0.3s;width:20px;height:20px}
+    .toggle-container.checked .toggle-thumb{transform:translateX(16px)}
+    .snackbar-alert{display:flex;align-items:flex-start;gap:var(--spacing-3x);padding:var(--spacing-3x) var(--spacing-4x);border-radius:var(--3x);font-family:var(--font-font-family-body);font-size:var(--font-font-size-label);font-weight:var(--font-font-weight-regular);margin-bottom:var(--spacing-4x);border:1px solid}
+    .snackbar-warn{background:var(--button-warning-hover-bg);border-color:#fde68a;color:#92400e}
+    .list-item{display:flex;justify-content:space-between;align-items:flex-start;padding:var(--spacing-4x);background:var(--button-secondary-bg-bg);border-radius:var(--border-radius-medium);margin-bottom:var(--spacing-3x);box-shadow:0px 1px 4px 0px rgba(0,0,0,0.05);gap:var(--spacing-4x);transition:box-shadow 0.2s}
+    .list-item:hover{box-shadow:var(--awe-card-shadow)}
+    .li-ico{width:40px;height:40px;border-radius:var(--border-radius);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .li-title{font-size:14px;font-weight:var(--font-font-weight-bold);margin-bottom:3px;color:var(--text-title)}
+    .li-sub{font-size:var(--font-font-size-label);color:var(--text-caption);line-height:1.6}
+    .li-acts{display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+    .info-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--Neutral-N-200);font-size:13px}
+    .info-row:last-child{border-bottom:none}
+    .info-lbl{font-size:var(--font-font-size-label);font-weight:var(--font-font-weight-medium);color:var(--text-caption)}
+    .info-val{color:var(--text-body);font-weight:var(--font-font-weight-medium)}
+    .reminder{display:flex;align-items:center;gap:var(--spacing-3x);padding:var(--spacing-3x) var(--spacing-4x);border-radius:var(--border-radius);border:1px solid var(--Neutral-N-200);background:var(--button-secondary-bg-bg);margin-bottom:var(--spacing-2x);font-size:13px;box-shadow:0px 1px 4px 0px rgba(0,0,0,0.05)}
+    .rem-ico{width:32px;height:32px;border-radius:var(--awe-card-border-radius);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+    .chat-wrapper{width:100%;padding:var(--spacing-4x);display:flex;flex-direction:column;border:1px solid var(--Neutral-N-200);border-radius:var(--border-radius-medium);background:var(--Elevation-Light-Fill-Light-60);backdrop-filter:blur(6px)}
+    .chat-messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:var(--spacing-3x);padding-right:6px;scrollbar-width:thin}
+    .ai-card{display:flex;justify-content:flex-start;margin-bottom:0}
+    .ai-card .awe-card{padding:var(--spacing-3x) var(--spacing-4x)!important;border-radius:var(--border-radius);max-width:85%;width:fit-content;min-height:auto;word-break:break-word;background:var(--button-secondary-bg-bg);border:1px solid var(--Neutral-N-200);font-size:13px;line-height:1.6}
+    .user-card{display:flex;justify-content:flex-end}
+    .user-card .awe-card{padding:var(--spacing-3x) var(--spacing-4x)!important;border-radius:var(--border-radius);max-width:85%;background:var(--button-primary-bg-subtle);border:1px solid rgba(63,81,181,0.2);font-size:13px;color:var(--text-body)}
+    .msg-who{font-size:10px;font-weight:var(--font-font-weight-bold);color:var(--text-caption);margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em}
+    .inbox-row{display:flex;align-items:center;padding:var(--spacing-3x);border-radius:var(--awe-card-border-radius);cursor:pointer;gap:var(--spacing-3x);transition:background 0.15s}
+    .inbox-row:hover{background:var(--button-primary-bg-subtle)}
+    .inbox-row+.inbox-row{border-top:1px solid var(--Neutral-N-200)}
+    .slot-grid{display:flex;flex-wrap:wrap;gap:var(--spacing-2x)}
+    .slot{padding:7px 14px;border:1.5px solid var(--button-secondary-border-action);border-radius:var(--awe-card-border-radius);cursor:pointer;font-size:var(--font-font-size-label);font-weight:var(--font-font-weight-medium);color:var(--text-caption);background:var(--button-secondary-bg-bg);transition:all 0.15s}
+    .slot:hover{border-color:var(--button-primary-bg-action);color:var(--button-primary-bg-action)}
+    .slot.selected{background:var(--button-primary-bg-action);color:var(--text-white);border-color:var(--button-primary-bg-action)}
+    .slot.full{opacity:.4;cursor:not-allowed;text-decoration:line-through}
+    .sel-grp{display:flex;flex-direction:column;gap:var(--spacing-2x)}
+    .sel-opt{display:flex;align-items:center;gap:var(--spacing-3x);padding:10px var(--spacing-3x);border:1.5px solid var(--button-secondary-border-action);border-radius:var(--awe-card-border-radius);cursor:pointer;font-size:13px;color:var(--text-caption);background:var(--button-secondary-bg-bg);transition:all 0.15s}
+    .sel-opt:hover{border-color:var(--button-primary-bg-action);background:var(--button-primary-bg-subtle);color:var(--text-body)}
+    .sel-opt.active{border-color:var(--button-primary-bg-action);background:var(--button-primary-bg-subtle);color:var(--button-primary-bg-action);font-weight:var(--font-font-weight-medium)}
+    .sel-dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--button-secondary-border-action);flex-shrink:0;transition:all 0.15s}
+    .sel-opt.active .sel-dot{border-color:var(--button-primary-bg-action);background:var(--button-primary-bg-action);box-shadow:inset 0 0 0 3px #fff}
+    .sel-lbl{flex:1}
+    .sel-sub{font-size:var(--font-font-size-small);color:var(--text-caption);margin-top:1px;font-weight:var(--font-font-weight-regular)}
+    .radio-grp{display:flex;gap:var(--spacing-2x);flex-wrap:wrap}
+    .radio-opt{padding:7px var(--spacing-4x);border:1.5px solid var(--button-secondary-border-action);border-radius:var(--awe-card-border-radius);cursor:pointer;font-size:13px;font-weight:var(--font-font-weight-medium);color:var(--text-caption);background:var(--button-secondary-bg-bg);transition:all 0.15s}
+    .radio-opt:hover{border-color:var(--button-primary-bg-action);color:var(--button-primary-bg-action)}
+    .radio-opt.active{border-color:var(--button-primary-bg-action);background:var(--button-primary-bg-subtle);color:var(--button-primary-bg-action)}
+    .confirm-card{background:var(--Elevation-Light-Fill-Light-30);border:1px solid var(--Neutral-N-200);border-radius:var(--border-radius);padding:var(--spacing-4x);margin-bottom:var(--spacing-4x)}
+    .ok-wrap{text-align:center;padding:var(--spacing-10x) var(--spacing-6x);max-width:480px;margin:0 auto}
+    .ok-ring{width:64px;height:64px;border-radius:50%;background:rgba(1,153,120,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto var(--spacing-5x)}
+    .ok-title{font-size:var(--font-font-size-heading-3);font-weight:var(--font-font-weight-bold);margin-bottom:var(--spacing-2x);color:var(--text-title)}
+    .ok-sub{font-size:13px;color:var(--text-caption);margin-bottom:var(--spacing-6x)}
+    .btn-grp{display:flex;gap:var(--spacing-2x);flex-wrap:wrap}
+    .card-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--spacing-4x)}
+    .flex-1{flex:1}
   </style>
 </head>
 <body>
-<!-- ... (Play UI high-fidelity HTML code for all screens, with navigation and visual details, as per the workflow and sample output) ... -->
+<div id="app">
+  <nav class="sidebar-container">
+    <div class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">🧒</div>
+        <div class="brand-name">YouthFunds <span>Parent</span></div>
+      </div>
+      <div class="sidebar-section-label">Main</div>
+      <ul>
+        <li class="selected" onclick="show('p1', this)"><span>Parent Main Dashboard</span></li>
+        <li onclick="show('p2', this)"><span>Youth Account Dashboard</span></li>
+      </ul>
+      <div class="sidebar-section-label">Youth Actions</div>
+      <ul>
+        <li onclick="show('p3', this)"><span>Add Funds</span></li>
+        <li onclick="show('p4', this)"><span>Set Spending Limit</span></li>
+        <li onclick="show('p5', this)"><span>View Activity</span></li>
+        <li onclick="show('p6', this)"><span>Activity Insights</span></li>
+      </ul>
+      <div class="sidebar-section-label">Feedback & Errors</div>
+      <ul>
+        <li onclick="show('p7', this)"><span>Transfer Result</span></li>
+        <li onclick="show('p8', this)"><span>Limit Edit Confirmation</span></li>
+        <li onclick="show('p9', this)"><span>Insufficient Balance Error</span></li>
+      </ul>
+      <div class="sb-footer">
+        <div class="sb-footer-text"><strong>v1.0</strong> • Accessible • Responsive</div>
+        <div class="sb-footer-text">© 2024 YouthFunds</div>
+      </div>
+    </div>
+  </nav>
+  <div id="main">
+    <div class="outer-box">
+      <div class="header-inner">
+        <div class="search-field"><input type="text" placeholder="Search..." /></div>
+        <div class="header-right">
+          <div class="circular-icon"><span>🔔</span><div class="notif-dot"></div></div>
+          <div class="avatar-chip">
+            <div class="avatar-img">PR</div>
+            <div class="avatar-chip-name">Parent Name</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="content">
+      <!-- 1.0 Parent Main Dashboard -->
+      <div class="page active" id="p1">
+        <div class="page-hdr">
+          <div>
+            <div class="heading h3">Parent Main Dashboard</div>
+            <div class="page-sub">Entry point to all parent features: accounts, notifications, navigation</div>
+          </div>
+        </div>
+        <div class="g2">
+          <div class="awe-card awe-card--light awe-card--medium">
+            <div class="awe-card__header card-title-text">Account Summary</div>
+            <div class="card-row">
+              <div class="stat-lbl">Youth Account</div>
+              <div class="badge badge-primary">Active</div>
+            </div>
+            <div class="stat-val">$325.00</div>
+            <div class="stat-sub">Last updated: Oct 24, 2024</div>
+            <div class="divider"></div>
+            <div class="btn-grp">
+              <button class="btn primary medium" onclick="show('p2',document.querySelectorAll('.sidebar li')[1])">Go to Youth Account</button>
+            </div>
+          </div>
+          <div class="awe-card awe-card--light awe-card--medium">
+            <div class="awe-card__header card-title-text">Notifications</div>
+            <div class="stat-lbl">New Activity</div>
+            <div class="stat-sub">Youth spent $12.50 at Bookstore</div>
+            <div class="divider"></div>
+            <div class="btn-grp">
+              <button class="btn secondary medium" onclick="show('p2',document.querySelectorAll('.sidebar li')[1])">View Youth Activity</button>
+            </div>
+          </div>
+        </div>
+        <div class="awe-card awe-card--light awe-card--auto">
+          <div class="awe-card__header card-title-text">Other Accounts</div>
+          <div class="stat-lbl">Savings</div>
+          <div class="stat-val">$1,220.00</div>
+        </div>
+      </div>
+      <!-- 2.0 Youth Account Dashboard -->
+      <div class="page" id="p2">
+        <div class="page-hdr">
+          <div>
+            <div class="heading h3">Youth Account Dashboard</div>
+            <div class="page-sub">Balance, recent transactions, quick actions</div>
+          </div>
+        </div>
+        <div class="g3">
+          <div class="awe-card awe-card--light awe-card--auto">
+            <div class="stat-lbl">Youth Balance</div>
+            <div class="stat-val">$325.00</div>
+            <div class="stat-sub">Last updated: Oct 24, 2024</div>
+          </div>
+          <div class="awe-card awe-card--light awe-card--auto">
+            <div class="stat-lbl">Weekly Limit</div>
+            <div class="stat-val">$50.00</div>
+            <div class="btn-grp">
+              <button class="btn secondary small" onclick="show('p4',document.querySelectorAll('.sidebar li')[4])">Edit Limit</button>
+            </div>
+          </div>
+          <div class="awe-card awe-card--light awe-card--auto">
+            <div class="stat-lbl">Recent Activity</div>
+            <div class="stat-sub">Spent $12.50 at Bookstore</div>
+            <div class="btn-grp">
+              <button class="btn secondary small" onclick="show('p5',document.querySelectorAll('.sidebar li')[5])">View All</button>
+            </div>
+          </div>
+        </div>
+        <div class="btn-grp" style="margin-bottom:22px;">
+          <button class="btn primary medium" onclick="show('p3',document.querySelectorAll('.sidebar li')[3])">Add Funds</button>
+          <button class="btn secondary medium" onclick="show('p4',document.querySelectorAll('.sidebar li')[4])">Set/Update Limit</button>
+        </div>
+        <div class="awe-card awe-card--light awe-card--auto">
+          <div class="awe-card__header card-title-text">Youth Account Details</div>
+          <div class="stat-lbl">Account Holder: Alex</div>
+          <div class="stat-sub">Status: Active</div>
+        </div>
+        <div class="awe-card awe-card--light awe-card--auto">
+          <div class="awe-card__header card-title-text">Unusual Activity / Achievements</div>
+          <div class="stat-sub">No unusual activity detected.</div>
+        </div>
+      </div>
+      <!-- 2.1 Add Funds Modal/Page -->
+      <div class="page" id="p3">
+        <div class="page-hdr">
+          <div>
+            <div class="heading h3">Add Funds to Youth Account</div>
+            <div class="page-sub">Transfer from parent account to youth</div>
+          </div>
+        </div>
+        <div class="awe-card awe-card--light awe-card--medium">
+          <form>
+            <div class="input-container fg">
+              <label for="source">Source Account</label>
+              <div class="input-wrapper">
+                <select id="source">
+                  <option>Parent Checking</option>
+                  <option>Parent Savings</option>
+                </select>
+              </div>
+            </div>
+            <div class="input-container fg">
+              <label for="amount">Amount</label>
+              <div class="input-wrapper">
+                <input id="amount" type="number" placeholder="$0.00" min="1" />
+              </div>
+            </div>
+            <div class="input-container fg">
+              <label>Suggested Amounts</label>
+              <div class="slot-grid">
+                <div class="slot" onclick="selSlot(this)">$10</div>
+                <div class="slot" onclick="selSlot(this)">$25</div>
+                <div class="slot" onclick="selSlot(this)">$50</div>
+              </div>
+            </div>
+            <div class="btn-grp">
+              <button class="btn primary medium" type="button" onclick="show('p7',document.querySelectorAll('.sidebar li')[7])">Confirm Transfer</button>
+              <button class="btn secondary medium" type="button" onclick="show('p2',document.querySelectorAll('.sidebar li')[1])">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- 2.2 Spending Limit Editor -->
+      <div class="page" id="p4">
+        <div class="page-hdr">
+          <div>
+            <div class="heading h3">Set/Update Spending Limit</div>
+            <div class="page-sub">Set weekly spending limit for youth</div>
+          </div>
+        </div>
+        <div class="awe-card awe-card--light awe-card--medium">
+          <form>
+            <div class="input-container fg">
+              <label>Current Limit</label>
+              <div class="input-wrapper"><input type="text" value="$50.00" disabled /></div>
+            </div>
+            <div class="input-container fg">
+              <label for="new-limit">New Limit</label>
+              <div class="input-wrapper"><input id="new-limit" type="number" placeholder="$0.00" min="1" /></div>
+            </div>
+            <div class="input-container fg">
+              <label>Guidance & Examples</label>
+              <div class="stat-sub">Typical weekly youth spend: $30-$60</div>
+            </div>
+            <div class="btn-grp">
+              <button class="btn primary medium" type="button" onclick="show('p8',document.querySelectorAll('.sidebar li')[8])">Save Limit</button>
+              <button class="btn secondary medium" type="button" onclick="show('p2',document.querySelectorAll('.sidebar li')[1])">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- 2.3 Activity List -->
+      <div class="page" id="p5">
+        <div class="page-hdr">
+          <div>
+            <div class="heading h3">Youth Activity List</div>
+            <div class="page-sub">List of transactions with filters</div>
+          </div>
+        </div>
+        <div class="tabs-container">
+          <div class="tabs-nav">
+            <div class="tab-item active" onclick="switchTab(this, 'activity-list')">List</div>
+            <div class="tab-item" onclick="switchTab(this, 'activity-insights')">Insights</div>
+          </div>
+        </div>
+        <div id="activity-list">
+          <div class="input-container fg">
+            <label>Filter by Date</label>
+            <div class="input-wrapper"><input type="date" /></div>
+          </div>
+          <div class="list-item">
+            <div>
+              <div class="li-title">Bookstore</div>
+              <div class="li-sub">Oct 24, 2024</div>
+            </div>
+            <div class="info-val">-$12.50</div>
+            <div class="li-acts">
+              <button class="btn small secondary">Details</button>
+            </div>
+          </div>
+          <div class="list-item">
+            <div>
+              <div class="li-title">Coffee Shop</div>
+              <div class="li-sub">Oct 22, 2024</div>
+            </div>
+            <div class="info-val">-$5.00</div>
+            <div class="li-acts">
+              <button class="btn small secondary">Details</button>
+            </div>
+          </div>
+        </div>
+        <div id="activity-insights" style="display:none;">
+          <div class="awe-card awe-card--light awe-card--auto">
+            <div class="card-title-text">Category Breakdown</div>
+            <div class="stat-sub">Bookstore: $12.50<br>Coffee Shop: $5.00</div>
+          </div>
+          <div class="awe-card awe-card--light awe-card--auto">
+            <div class="card-title-text">Time Trends</div>
+            <div class="stat-sub">Total spent this week: $17.50</div>
+          </div>
+        </div>
+      </div>
+      <!-- 2.4 Activity Insights -->
+      <div class="page" id="p6">
+        <div class="page-hdr">
+          <div>
+            <div class="heading h3">Spending Insights</div>
+            <div class="page-sub">Visualize youth spending patterns</div>
+          </div>
+        </div>
+        <div class="g2">
+          <div class="awe-card awe-card--light awe-card--medium">
+            <div class="card-title-text">Category Breakdown</div>
+            <div class="stat-sub">Bookstore: $12.50<br>Coffee Shop: $5.00</div>
+          </div>
+          <div class="awe-card awe-card--light awe-card--medium">
+            <div class="card-title-text">Time Trends</div>
+            <div class="stat-sub">Total spent this week: $17.50</div>
+          </div>
+        </div>
+      </div>
+      <!-- Pu.1 Success/Failure Pop-Up -->
+      <div class="page" id="p7">
+        <div class="page-hdr">
+          <div>
+            <div class="heading h3">Transfer Result</div>
+            <div class="page-sub">Success or failure message after transfer</div>
+          </div>
+        </div>
+        <div class="confirm-card">
+          <div class="ok-wrap">
+            <div class="ok-ring badge-success">✓</div>
+            <div class="ok-title">Transfer completed successfully!</div>
+            <div class="ok-sub">Funds added to youth account.</div>
+            <div class="btn-grp">
+              <button class="btn primary medium" onclick="show('p2',document.querySelectorAll('.sidebar li')[1])">Back to Dashboard</button>
+              <button class="btn secondary medium" onclick="show('p3',document.querySelectorAll('.sidebar li')[3])">Add More Funds</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Pu.2 Limit Edit Confirmation -->
+      <div class="page" id="p8">
+        <div class="page-hdr">
+          <div>
+            <div class="heading h3">Limit Edit Confirmation</div>
+            <div class="page-sub">Confirm before saving new limit</div>
+          </div>
+        </div>
+        <div class="confirm-card">
+          <div class="ok-wrap">
+            <div class="ok-ring badge-warning">!</div>
+            <div class="ok-title">Are you sure you want to update the spending limit?</div>
+            <div class="ok-sub">This change will take effect immediately.</div>
+            <div class="btn-grp">
+              <button class="btn primary medium" onclick="show('p2',document.querySelectorAll('.sidebar li')[1])">Confirm</button>
+              <button class="btn secondary medium" onclick="show('p4',document.querySelectorAll('.sidebar li')[4])">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Er.1 Insufficient Balance Error -->
+      <div class="page" id="p9">
+        <div class="page-hdr">
+          <div>
+            <div class="heading h3">Insufficient Balance Error</div>
+            <div class="page-sub">Unable to complete transfer: not enough funds</div>
+          </div>
+        </div>
+        <div class="confirm-card">
+          <div class="ok-wrap">
+            <div class="ok-ring badge-danger">×</div>
+            <div class="ok-title">Your account does not have sufficient funds.</div>
+            <div class="ok-sub">Try a smaller amount or use another source.</div>
+            <div class="btn-grp">
+              <button class="btn primary medium" onclick="show('p3',document.querySelectorAll('.sidebar li')[3])">Retry Transfer</button>
+              <button class="btn secondary medium" onclick="show('p2',document.querySelectorAll('.sidebar li')[1])">Back to Dashboard</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function show(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.sidebar li').forEach(n => n.classList.remove('selected'));
+  if (el) el.classList.add('selected');
+}
+function switchTab(el, panelId) {
+  el.parentElement.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  if(panelId==='activity-list') {
+    document.getElementById('activity-list').style.display='block';
+    document.getElementById('activity-insights').style.display='none';
+  } else {
+    document.getElementById('activity-list').style.display='none';
+    document.getElementById('activity-insights').style.display='block';
+  }
+}
+function selSlot(el){if(el.classList.contains('full'))return;el.parentElement.querySelectorAll('.slot').forEach(s=>s.classList.remove('selected'));el.classList.add('selected')}
+</script>
 </body>
 </html>
